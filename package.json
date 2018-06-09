@@ -1,0 +1,29 @@
+{
+  "name": "new",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "set NODE_ENV=production && node --nouse-idle-notification --expose-gc app-cluster.js"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "latest",
+    "body-parser": "*",
+    "cluster": "*",
+    "compression": "^1.7.1",
+    "connect-flash": "*",
+    "connect-mongo": "^2.0.1",
+    "cookie-parser": "*",
+    "express": "*",
+    "express-session": "*",
+    "gaikan": "*",
+    "memory-cache": "^0.2.0",
+    "method-override": "*",
+    "mongoose": "*",
+    "os": "^0.1.1",
+    "passport": "*",
+    "passport-local": "*",
+    "path": "*",
+    "request": "^2.87.0",
+    "serve-favicon": "*"
+  }
+}

@@ -1,0 +1,1 @@
+web: NODE_ENV=production && node --nouse-idle-notification --expose-gc app-cluster.js
