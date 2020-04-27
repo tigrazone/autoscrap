@@ -2,3 +2,139 @@
 {
 	outline:1px solid red
 }
+
+
+.bx-wrapper {
+    width: 500px;
+    margin: 0 auto;
+    position: relative;
+}
+.bx-wrapper img {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+}
+#bx-pager {margin-top:20px;
+    text-align: center;
+}
+#bx-pager a {
+    margin: 0 3px;
+}
+
+#bx-pager a img {
+    padding: 3px;
+    border: solid #ccc 1px;width:76px;transition:.4s ease-in-out
+}
+#bx-pager a.active img {
+    border: solid #D4104E 1px;
+}
+.bx-prev, .bx-next {
+    text-decoration: none;
+    position: absolute;
+    top: 50%;
+    margin-top: -40px;
+    background: white;
+    color: #666;
+    width: 30px;
+    height: 80px;
+   
+    text-align: center;
+    transition: linear .4s;
+    z-index: 10;
+    cursor: pointer;
+}
+.bx-prev:before, .bx-next:before {
+    font-family: "FontAwesome";
+    font-size: 30px;
+    line-height: 80px;
+}
+.bx-next:before {
+    content: "\f105";
+}
+.bx-prev {
+    left: 0px;border-radius: 0 5px 5px 0
+}
+.bx-prev:before {
+    content: "\f104";
+}
+.bx-next {
+    right: 0px;border-radius: 5px 0 0 5px
+}
+
+a.bx-prev:hover,
+a.bx-next:hover,
+a.bx-prev,
+a.bx-next
+{
+	text-decoration: none !important
+}
+
+#bx-pager{max-width:440px;margin:0 auto;margin-top:8px;margin-bottom:12px}
+
+.lot-details-label
+{
+	width:auto;
+	font-weight:550;
+}
+
+.lot-details-desc
+{
+	float:right;
+	display:inline-block;
+}
+
+.navbar-brand {
+  padding: 0px;
+}
+.navbar-brand>img {
+  width: 64px!important;
+}
+
+a.navbar-brand
+{
+	letter-spacing:-0.3pt;
+}
+
+/* EXAMPLE 5 - Logo with Text*/
+.example5 .navbar-brand {
+  display: flex;
+  align-items: center;
+}
+.example5 .navbar-brand>img {
+  padding: 7px;
+  padding-left: 0;
+  padding-right: 4px;
+}
+
+.list-group-item
+{	
+    overflow: hidden;
+    width: 100%
+}
+
+.bx-wrapper
+{
+	display: inline-grid !important;
+}
+
+
+.navbar-nav > li > span > a {
+	color:#777;
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}
+.navbar-nav>li>span>a:hover,
+.navbar-default .navbar-nav>li>span>a:focus{color:#333;background-color:transparent}
+.navbar-nav>li>span>a{color:#777}
+.navbar-nav>li>span>a:hover,
+.navbar-inverse .navbar-nav>li>span>a:focus{color:#777;background-color:transparent}
+
+@media (min-width:768px){
+	.navbar-nav>li> span >a{padding-top:10px;padding-bottom:10px;line-height:20px}
+}
+
+@media (min-width:768px){
+	.navbar-nav>li> span >a{padding-top:15px;padding-bottom:15px}}
+
+}

@@ -1,0 +1,188 @@
+<style>* {
+ box-sizing: border-box;
+}
+ul{list-style:none;margin:0;padding:0;}
+h2{text-align:center}
+.mt1 {margin-top:8px}
+</style>
+
+<script src="https://html5book.ru/examples/bxSlider/jquery.bxslider.js"></script>
+<script>
+	function do_subm()
+	{
+		var d = document.getElementById('comment');
+		var v = d.value;
+		if(v.length) v=v.trim();
+		var url = "/make_order/#{root.lot['_id']}";
+		var xhr = new XMLHttpRequest();
+
+var body = 'comment=' + encodeURIComponent(v);
+
+xhr.open('POST', url, true);
+xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+
+xhr.onreadystatechange = function() {
+  if (this.readyState != 4) return;
+
+  alert( this.responseText );
+  $('#myModal_done_order').modal('show');
+  var d = document.getElementById('comment');
+  d.value = '';
+};
+
+xhr.send(body);
+	}
+	</script>
+
+			@{var imagesExists = root.images.length > 0;}
+
+<script data-if="imagesExists">$(document).ready(function(){
+  $('.bxslider').bxSlider({
+ nextText:'',
+   prevText:'',
+  pagerCustom: '#bx-pager',
+  startSlide: 0
+  });
+});</script>
+
+
+<h3>#{root.lot['lotYear']} #{root.lot['lotMakeDesc']} #{root.lot['lotModelDesc']}</h3>
+<div class="row no-margin">
+	<div class="col-md-5 no-padding image-location">
+			<div class="slider" data-if="imagesExists">
+				<ul class="bxslider" data-for="value, key in root.images">
+					<li><img src="#{value}"/></li>
+				 </ul>
+				<div id="bx-pager" data-for="value, key in root.images">
+					<a data-slide-index="#{key}" href=""><img src="#{value}" /></a>
+				</div>
+			</div>
+	</div>
+	<div class="col-md-7 no-padding">
+	<div class="row no-margin">
+	<div class="col-md-7 no-padding col-sm-12 col-xs-12 mt1">
+		<div class="list-group">
+		  <div class="list-group-item active">Lot #
+			#{root.lot['lotNumber']}
+		  </div>
+		  <div class="list-group-item list-group-item-action"><span class="lot-details-label">Odometer</span><span class="lot-details-desc">#{root.lot['odometerReadingReceived']} <small>#{root.lot['odometerReadingDesc']}</small></span></div>
+		  <div class="list-group-item list-group-item-action"><span class="lot-details-label">Damage</span><span class="lot-details-desc">#{root.lot['damageDesc']}</span></div>
+		  <div class="list-group-item list-group-item-action"><span class="lot-details-label">Color</span><span class="lot-details-desc">#{root.lot['lotColor']}</span></div>
+		  <div class="list-group-item list-group-item-action"><span class="lot-details-label">Highlights</span><span class="lot-details-desc">
+				<span data-for="value, key in root.lot.highlights">#{value}<br></span>
+				 </span></div>
+		</div>
+		
+		<div class="list-group mt1">
+		  <div class="list-group-item active">Bid Info</div>
+		  <div class="list-group-item list-group-item-action"><span class="lot-details-label">Sale status</span><span class="lot-details-desc">#{root.lot['saleStatus']}</span></div>
+		  <div class="list-group-item list-group-item-action"><span class="lot-details-label">Current high bid</span><span class="lot-details-desc">#{root.lot['currentHighBid']} #{root.lot['currencyCode']}</span></div>
+		  <div class="list-group-item list-group-item-action"><span class="lot-details-label">Buy it now price</span><span class="lot-details-desc">#{root.lot['buyItNowPrice']} #{root.lot['currencyCode']}</span></div>
+		  <div class="list-group-item list-group-item-action"><span class="lot-details-label">Sale Date</span><span class="lot-details-desc"><small>#{root.dat} (#{root.lot['timeZone']})</small></span></div>
+		  <div class="list-group-item list-group-item-action"><span class="lot-details-label">Yard</span><span class="lot-details-desc">#{root.lot['yardName']} (#{root.lot['yardNumber']})</span></div>
+		</div>
+	</div>
+	<div class="mt1 col-md-5 pull-right no-padding col-sm-12 col-xs-12 bid-right-col">
+		<div class="list-group">
+		  <div class="list-group-item active">Location</div>
+		  <div class="list-group-item list-group-item-action"><span class="lot-details-label">Country</span><span class="lot-details-desc">#{root.lot['locationCountry']}</span></div>
+		  <div class="list-group-item list-group-item-action"><span class="lot-details-label">City</span><span class="lot-details-desc">#{root.lot['locationCity']}</span></div>
+		  <div class="list-group-item list-group-item-action"><span class="lot-details-label">State</span><span class="lot-details-desc">#{root.lot['locationState']}</span></div>
+		</div>
+	</div>
+	</div>
+	</div>
+</div>
+
+<div>
+	<!--
+	<button class="btn btn-warning btn-lg" onclick="this.style.display='none';var d=document.getElementById('navvv');d.style.display='block';return false">Order</button>
+	
+	
+  <div id=navvv style="display:none">
+	  <ul class="nav nav-tabs" role="tablist">
+		<li class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Домой</a></li>
+		<li><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Профиль</a></li>
+		<li><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Сообщения</a></li>
+		<li><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Настройки</a></li>
+	  </ul>
+	  
+	  <div class="tab-content">
+		<div role="tabpanel" class="tab-pane active fade in" id="home">...1</div>
+		<div role="tabpanel" class="tab-pane fade" id="profile">...2</div>
+		<div role="tabpanel" class="tab-pane fade" id="messages">...3</div>
+		<div role="tabpanel" class="tab-pane fade" id="settings">...4</div>
+	  </div>
+	</div>
+	-->
+	
+<div class="container">
+
+<span data-if="root.user_id === ''">
+  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Order</button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">You must to be loged in to Order</h4>
+        </div>
+        <div class="modal-body">
+          <p><a href="/login">Login</a> or <a href="/signup">Sign up</a></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</span>
+
+<span data-if="root.user_id !== ''">
+	<h4>MAKE ORDER</h4>
+
+	
+
+    <form action="/" method="post" onsubmit="do_subm();return false">
+        <div class="form-group">
+            <label>comment</label>
+            <input type="text" class="form-control" id="comment">
+        </div>
+
+        <button type="submit" class="btn btn-warning btn-lg">Send</button>
+    </form>
+
+</span>
+</div>
+	
+<!-- $('#myModal').modal('show') -->
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal_done_order" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Order</h4>
+        </div>
+        <div class="modal-body">
+          <p>Your order is remembered</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>

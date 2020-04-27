@@ -1,8 +1,17 @@
 // load all the things we need
 var LocalStrategy    = require('passport-local').Strategy;
 
+
+var one_mailer = require('../libs/one_mailer');
+
 // load up the user model
 var User       = require('../app/models/user');
+
+
+ var email_reg = /^([a-zA-Z0-9_\.\-])+@([a-zA-Z0-9\-]+\.?)*\.([a-zA-Z]){2,5}$/;
+ var name_reg = /[a-zA-ZА-Яа-яЇїєЄіІъЪ]/ig;
+ var rus_phones = /^((\+7|7|8)+([0-9]){10})$/gm;
+ var ukr_phones = /^((\+38)-?)?(\(?044|045|048|032|050|063|066|099|073|093|067|097|098|068|091|094\)?)?-?\d{3}-?\d{2}-?\d{2}$/gm;
 
 
 module.exports = function(passport) {
@@ -43,14 +52,14 @@ module.exports = function(passport) {
 	
     passport.use('local-login', new LocalStrategy({
         // by default, local strategy uses username and password, we will override with email
-        usernameField : 'login',
+        usernameField : 'email',
         passwordField : 'password',
         passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
     },	
   function(req, username, password, done) {
         // asynchronous
         process.nextTick(function() {
-				User.findOne({ 'local.username': username }, function (err, user) {
+				User.findOne({ 'local.email': username }, function (err, user) {
                 // if there are any errors, return the error
                 if (err)
                     return done(err);
@@ -113,10 +122,52 @@ module.exports = function(passport) {
         if (email)
             email = email.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
 		
-		var username = req.body.username
-		//console.log('username='+username)
-		if(username.length) username=username.trim()
-		if(!username.length || username===undefined) return done(null, false, req.flash('signupMessage', 'Please enter username'));
+		var name1 = req.body.name1
+		console.log('name1='+name1)
+		if(name1.length) name1=name1.trim()
+		if(!name1.length || name1===undefined) return done(null, false, req.flash('signupMessage', 'Please enter First Name'));
+		
+		if(!(name_reg.test(name1))) return done(null, false, req.flash('signupMessage', 'Please enter valid chars in First Name'));
+		
+		
+		var name2 = req.body.name2
+		console.log('name2='+name2)
+		if(name2.length) name2=name2.trim()
+		if(!name2.length || name2===undefined) return done(null, false, req.flash('signupMessage', 'Please enter Last Name'));
+		
+		if(!(name_reg.test(name2))) return done(null, false, req.flash('signupMessage', 'Please enter valid chars in Last Name'));
+		
+		
+		console.log('email='+email)
+		if(email.length) email=email.trim()
+		if(!email.length || email===undefined) return done(null, false, req.flash('signupMessage', 'Please enter Email'));
+		
+		if(!(email_reg.test(email))) return done(null, false, req.flash('signupMessage', 'Please enter valid email'));
+		
+		
+		var phone = req.body.phone
+		console.log('phone='+phone)
+		if(phone.length) phone=phone.trim()
+		if(!phone.length || phone===undefined) return done(null, false, req.flash('signupMessage', 'Please enter Phone'));
+		
+		if( //не срабатывает ни одно условие
+			!(rus_phones.test(phone)) 
+			&&
+			!(ukr_phones.test(phone))
+			)
+		return done(null, false, req.flash('signupMessage', 'Please enter valid Phone'));
+		
+		
+		
+		if(!password.length || password===undefined) return done(null, false, req.flash('signupMessage', 'Please enter Password'));
+		
+		var password2 = req.body.pwd2
+		console.log('password='+password)
+		if(!password2.length || password2===undefined) return done(null, false, req.flash('signupMessage', 'Please enter Password again'));
+		
+		if(password != password2)
+			 return done(null, false, req.flash('signupMessage', 'Please enter same Passwords'));
+		
 		
 		console.log('req.user')
 		console.log(req.user)
@@ -141,14 +192,15 @@ module.exports = function(passport) {
 
                     // check to see if theres already a user with that email
                     if (user) {
+						console.log('**** email already exists ');
                         return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
                     } else {
 
                         
 				
 					//check by username
-					User.findOne({ 'local.username': username }, function (err, user) {
-						
+					//User.findOne({ 'local.username': username }, function (err, user) {
+						/*
 		console.log('user')
 		console.log(user)
 		console.log('err')
@@ -160,13 +212,37 @@ module.exports = function(passport) {
 					  
 					  if(!fnd)
 					  {
+						  */
 						  //create user
 						   var newUser = new User();
+						   
+						   var activatoHash = newUser.generateHash(password+'_'+Math.random())
+						   //console.log(activatoHash);
+						   activatoHash = activatoHash.replace(/[^[a-zA-Z0-9]]*/ig,''); 
+						   //console.log('* '+activatoHash);
+						   
+						   //random crop letters
+						   var needed_letters = 22;
+						   var letters = activatoHash.length;
+						   
+						   var start = parseInt(Math.random()*(letters-needed_letters));
+						   
+						   activatoHash = activatoHash.substring(start, start + needed_letters);
+						   
+						   /*
+							TODO: send activation email
+						   */
+						   
+						   
 							
 							newUser.local = {
 								email : email,
-								username : username,
-								password : newUser.generateHash(password)
+								name1 : name1,
+								name2 : name2,
+								phone : phone,
+								role  : 'newmember',
+								password : newUser.generateHash(password),
+								activatoHash: activatoHash
 							};
 							newUser.save(function (err) {
 								if (err)
@@ -174,11 +250,15 @@ module.exports = function(passport) {
 								
 								return done(null,newUser);
 							});
+							
+							//send activate email
+							one_mailer.sendActivateEmail(email, 'http://dev001.primeauto.ltd', activatoHash);
+							/*
 					  }					  
 					  else
 						return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
-					});
-					
+					//});
+					*/
 					
 					
                     }
@@ -199,7 +279,7 @@ module.exports = function(passport) {
 						
 				
 					//check by username
-					User.findOne({ 'local.username': username }, function (err, user) {
+					//User.findOne({ 'local.username': username }, function (err, user) {
 					  var fnd = true
 					  if (err) { return done(err); }
 					  if (!user) { fnd = false; }
@@ -211,8 +291,12 @@ module.exports = function(passport) {
 							
 							newUser.local = {
 								email : email,
-								username : username,
-								password : newUser.generateHash(password)
+								name1 : name1,
+								name2 : name2,
+								phone : phone,
+								role  : 'newmember',
+								password : newUser.generateHash(password),
+								activatoHash: activatoHash
 							};
 							newUser.save(function (err) {
 								if (err)
@@ -220,9 +304,14 @@ module.exports = function(passport) {
 								
 								return done(null,newUser);
 							});
-					  } else		 
+							
+							//send activate email
+							one_mailer.sendActivateEmail(email, 'http://dev001.primeauto.ltd', activatoHash);
+
+					  }
+					  else		 
 						return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
-					});
+					//});
 						
 						
 						

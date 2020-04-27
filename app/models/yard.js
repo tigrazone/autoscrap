@@ -3,15 +3,11 @@ var mongoose = require('mongoose');
 
 // define the schema for our user model
 var yardSchema = mongoose.Schema({
-
-    local            : {
+	
         yardNumber	 : Number,
 		yardName	 : String,
 		auctionDate  : Date,
-		links     	 : [],
-        lotNumber    : Number,
-		result		 : {}
-    }
+		links     	 : []
 
 });
 

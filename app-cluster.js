@@ -48,24 +48,39 @@ console.log(os.cpus())
 
 process.env.NODE_ENV = 'production';
 
+var clusterIDD = 0;
+
 if(cluster.isMaster)
 {
-	var cpuCount = os.cpus().length;
+	//var cpuCount = os.cpus().length;
+	var cpuCount = 2; //2 процессa записутить
 	
 	for(var i=0;i<cpuCount; i++)
 	{
 		cluster.schedulingPolicy = cluster.SCHED_NONE;
+		clusterIDD++;
+		
 		cluster.fork();
 	}
 	
 	cluster.on('exit', function(worker) {
 		console.log('Worker '+worker.id+' died :(');
-		cluster.fork();
+		//start new thread
+		clusterIDD++;
+		
+		//cluster.fork();
 	});
 }
 else
 {
 
+var wID = 0;
+	
+if (cluster.isWorker) 
+{
+  console.log('I am worker #' + cluster.worker.id);
+  wID = cluster.worker.id;
+}
 
 
 /******* GARBAGE ********/
@@ -119,6 +134,41 @@ app.engine('html', gaikan);
 
 
 
+// <<<<<<< HEAD
+// =======
+var one_mailer = require('./libs/one_mailer');
+var config = require('./libs/config');
+var nodemailer = require('nodemailer');
+
+var bcrypt   = require('bcrypt-nodejs');
+
+var activatoHash = 
+bcrypt.hashSync(
+		'_'+Math.random()
+		, bcrypt.genSaltSync(8), null
+);
+
+						   //console.log(activatoHash);
+						   activatoHash = activatoHash.replace(/[^[a-zA-Z0-9]]*/ig,''); 
+						   //console.log('* '+activatoHash);
+						   
+						   //random crop letters
+						   var needed_letters = 22;
+						   var letters = activatoHash.length;
+						   
+						   var start = parseInt(Math.random()*(letters-needed_letters));
+						   
+						   activatoHash = activatoHash.substring(start, start + needed_letters);
+						   
+
+//send activate email
+//one_mailer.sendActivateEmail('tigrazone@ukr.net', 'http://dev001.primeauto.ltd', activatoHash);
+//one_mailer.sendActivateEmail('tigrazone@gmail.com');
+
+
+
+
+// >>>>>>> ff8bc9e3f1184fe6855e3fa63630adb58a72bacc
 var myconfig_session = {
     "secret": "nodeJSForever",
     "key": "sid",

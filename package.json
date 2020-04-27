@@ -6,6 +6,7 @@
     "start": "set NODE_ENV=production && node --nouse-idle-notification --expose-gc app-cluster.js"
   },
   "dependencies": {
+    "amqplib": "^0.5.2",
     "bcrypt-nodejs": "latest",
     "body-parser": "*",
     "cluster": "*",
@@ -13,12 +14,14 @@
     "connect-flash": "*",
     "connect-mongo": "^2.0.1",
     "cookie-parser": "*",
+    "elasticsearch": "^15.0.0",
     "express": "*",
     "express-session": "*",
     "gaikan": "*",
     "memory-cache": "^0.2.0",
     "method-override": "*",
     "mongoose": "*",
+    "nodemailer": "*",
     "os": "^0.1.1",
     "passport": "*",
     "passport-local": "*",

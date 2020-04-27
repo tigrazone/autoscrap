@@ -6,9 +6,14 @@ var bcrypt   = require('bcrypt-nodejs');
 var userSchema = mongoose.Schema({
 
     local            : {
-        username     : String,
+        name1     : String,
+        name2     : String,
+        phone     : String,
         email        : String,
-        password     : String
+        password     : String, //'' для автогенерированного
+        activatoHash : String,
+        createDate : { type: Date, default: Date.now },
+        role        : String	//newmember - не активированный; member, manager, admin
     }
 
 });

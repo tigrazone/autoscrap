@@ -1,0 +1,139 @@
+
+<br><style>th{text-align:center} td a, td a:hover{text-decoration:none;color:black} td{padding:5px}</style>
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-2" style="background-color:yellow;">
+		<h4>FILTERS</h4>
+		<form class="form-inline" action="/search"><input type=hidden name=q value="!{root.q}">
+		<div>
+			<h6>Make</h6>
+	  		<span data-for="value, key in root.vals['make']">
+					<label class="checkbox-inline"><input type="checkbox" value="#{root.vals['kmake'][key]}" name="make[]" id="make_#{root.vals['kmake'][key]}">#{value}</label>
+			 </span>
+		</div>
+		<div>
+			<h6>Model</h6>
+	  		<span data-for="value, key in root.vals['model']">
+					<label class="checkbox-inline"><input type="checkbox" value="#{root.vals['kmodel'][key]}" name="model[]" id="model_#{root.vals['kmodel'][key]}">#{value}</label>
+			 </span>
+		</div>
+		<div>
+			<h6>Color</h6>
+	  		<span data-for="value, key in root.vals['color']">
+					<label class="checkbox-inline"><input type="checkbox" value="#{root.vals['kcolor'][key]}" name="color[]" id="color_#{root.vals['kcolor'][key]}">#{value}</label>
+			 </span>
+		</div>
+				
+		  <div class="form-group">
+			<label for="year1">Year from:</label>
+			<input type="text" class="form-control" id="year1" name="year1" value="#{root.vals['year'][0]}">
+		  </div>
+		  <div class="form-group">
+			<label for="year2">to:</label>
+			<input type="text" class="form-control" id="year2" name="year2" value="#{root.vals['year'][1]}">
+		  </div>
+		  <div> </div>
+				
+		  <div class="form-group">
+			<label for="byin1">BuyItNow from:</label>
+			<input type="text" class="form-control" id="byin1" name="byin1" value="#{root.vals['buyItNow'][0]}">
+		  </div>
+		  <div class="form-group">
+			<label for="byin2">to:</label>
+			<input type="text" class="form-control" id="byin2" name="byin2" value="#{root.vals['buyItNow'][1]}">
+		  </div>		  
+		  
+		<div>
+			<h6>Damage</h6>
+	  		<span data-for="value, key in root.vals['damage']">
+					<label class="checkbox-inline"><input type="checkbox" value="#{root.vals['kdamage'][key]}" name="damage[]" id="damage_#{root.vals['kdamage'][key]}">#{value}</label>
+			 </span>
+		</div>
+		<button type="submit" class="btn btn-default">Submit</button>
+		</form>
+		
+    </div>
+    <div class="col-sm-10">
+        <table id="results" class="table table-striped table-bordered" style="width:100%">
+		<thead>
+				<tr>
+						<th style="width:96px!important">&nbsp;</th><th>yard</th><th>lot</th><th>MakeDesc</th><th>ModelDesc</th><th>year</th>
+						<th>color</th><th>vehicleTypeDesc</th><th>currentHighBid</th><th>buyItNowPrice</th>
+				</tr>
+		</thead>
+		<tbody data-for="value, key in root.hits">
+			<tr onclick="location.assign('/lot/#{value['_id']}')" onmouseover="this.style.cursor='pointer'" onmouseout="this.style.cursor='arrow'">
+				<td style="width:96px!important"><a href="/lot/#{value['_id']}"><span data-if="value['_source']['thumb'].length > 0"><img src="#{value['_source']['thumb']}" style="width:96px!important"></span></td>
+				<td align=center><a href="/lot/#{value['_id']}">#{value['_source'].yardNumber}</td>
+				<td align=center><a href="/lot/#{value['_id']}">#{value['_source'].lotNumber}</td>
+				<td><a href="/lot/#{value['_id']}">#{value['_source'].lotMakeDesc}</td>
+				<td><a href="/lot/#{value['_id']}">#{value['_source'].lotModelDesc}</td>
+				<td align=center><a href="/lot/#{value['_id']}">#{value['_source'].lotYear}</td>
+				<td align=center><a href="/lot/#{value['_id']}">#{value['_source'].lotColor}</td>
+				<td align=center><a href="/lot/#{value['_id']}">#{value['_source'].vehicleTypeDesc}</td>
+				<td align=center><a href="/lot/#{value['_id']}">#{value['_source'].currentHighBid}</td>
+				<td align=center><a href="/lot/#{value['_id']}">#{value['_source'].buyItNowPrice}</td>
+			</tr>
+		</tbody>
+		</table>
+
+    </div>
+  </div>
+</div>
+
+<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+
+<script>
+	var d=document.getElementById('search_q');
+	d.value="!{root.q}";
+	
+	$(document).ready(function() {
+		$('#results').DataTable(
+			{							  
+			  "order": [[ 4, "asc" ]],
+			  "columns": [
+				{ "orderable": false }, /* photo */
+				{ "orderable": false }, /* yardNumber */
+				{ "orderable": false }, /* lotNumber */
+				{ "orderable": false }, /* lotMakeDesc */
+				{ "orderable": false }, /* lotModelDesc */
+				{ "orderable":  true }, /* lotYear */
+				{ "orderable": false }, /* lotColor */
+				{ "orderable": false }, /* vehicleTypeDesc */
+				{ "orderable":  true }, /* currentHighBid */
+				{ "orderable":  true }, /* buyItNowPrice */
+			  ],	
+			responsive: true
+			}
+		);
+} );
+</script>
+
+<script data-for="value, key in root.checked_cb">
+	var d=document.getElementById('#{value}');
+	d.click();
+</script>
+
+<script data-if="root.years_set[0] > 0">
+    var d=document.getElementById('year1');
+    d.value="#{root.years_set[0]}";
+</script>
+
+<script data-if="root.years_set[1] > 0">
+    var d=document.getElementById('year2');
+    d.value="#{root.years_set[1]}";
+</script>
+
+<script data-if="root.byin_set[0] > 0">
+    var d=document.getElementById('byin1');
+    d.value="#{root.byin_set[0]}";
+</script>
+
+<script data-if="root.byin_set[1] > 0">
+    var d=document.getElementById('byin2');
+    d.value="#{root.byin_set[1]}";
+</script>

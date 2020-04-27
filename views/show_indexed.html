@@ -1,0 +1,11 @@
+<br>
+<script>
+var s="!{root.resp|break}";
+s =s.replace(/\s+/g,"</td><td>"); 
+s =s.replace("<br />","</tr><tr><td>");
+s =s.replace("<br","");
+s =s.replace("/>","</tr><tr><td>");
+s =s.replace("<br</td><td>/>", "");
+s = "<table border=1 cellspacing=0 cellpadding=4><TR><tD>" + s + "</table>";
+document.write(s);
+</script>

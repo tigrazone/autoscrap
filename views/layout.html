@@ -1,15 +1,72 @@
-<!DOCTYPE html><html><head><title>socks2money</title>
+<!DOCTYPE html><html><head><title>#{root.title}</title>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/fontawesome-all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css">
+		
     <link rel="stylesheet" href="/css/style.css">
-	<script src="/js/jquery-3.3.1.min.js"></script>	
+	<script src="/js/jquery-3.3.1.min.js"></script>
+	
 	<script src="/js/jquery.validate.min.js"></script>
+	
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 </head>
 <body>
+<div class="container example5">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar5">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/"><img src="https://res.cloudinary.com/disputebills/image/upload/v1462474206/blue-mark_cnzgry.png">primeauto
+        </a>
+      </div>
+      <div id="navbar5" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right" data-if="root.user_id === ''">
+		<!--
+          <li class="active"><a href="#">Home</a></li>
+		  -->
+          <li><a href="/login">Log in</a></li>
+          <li><a href="/signup">Sign up</a></li>
+        </ul>		
+        <ul class="nav navbar-nav navbar-right" data-if="root.user_id !== ''">
+		<!--
+          <li class="active"><a href="#">Home</a></li>
+		  -->
+          <li>
+			<span data-if="root.user_role === 'admin'"><a href="/admino">admin panel</a></span>
+			<span data-if="root.user_role === 'admin'"><a href="/users">Users</a></span>
+			<span data-if="root.user_role === 'admin'"><a href="/settings">Settings</a></span>
+			<span><a href="/orders">Orders</a></span>
+		  </li>
+          <li><a href="/profile">Profile</a></li>
+          <li><a href="?logout">Log out</a></li>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+    <!--/.container-fluid -->
+  </nav>
+
+<div class="input-group" style="min-width:85%;max-width:97%;margin:0 auto;margin-top:2ex;white-space:nowrap">
+<form method=get action="/search">	
+	<input class="form-control" placeholder="Search" type=text name=q id=search_q style="width:80%">
+            <div class="input-group-btn">
+                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+			</div>
+</form>
+</div>
+<hr>  
+  
 	  <div data-fragment="content"></div>
+	  
+</div>
 	<script>
 	</script>
 </body>
