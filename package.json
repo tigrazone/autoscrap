@@ -6,15 +6,15 @@
     "start": "set NODE_ENV=production && node --nouse-idle-notification --expose-gc app-cluster.js"
   },
   "dependencies": {
-    "amqplib": "^0.5.2",
+    "amqplib": "^0.10.9",
     "bcrypt-nodejs": "latest",
     "body-parser": "*",
     "cluster": "*",
-    "compression": "^1.7.1",
+    "compression": "^1.8.1",
     "connect-flash": "*",
-    "connect-mongo": "^2.0.1",
+    "connect-mongo": "^5.1.0",
     "cookie-parser": "*",
-    "elasticsearch": "^15.0.0",
+    "elasticsearch": "^16.7.3",
     "express": "*",
     "express-session": "*",
     "gaikan": "*",
@@ -22,11 +22,11 @@
     "method-override": "*",
     "mongoose": "*",
     "nodemailer": "*",
-    "os": "^0.1.1",
+    "os": "^0.1.2",
     "passport": "*",
     "passport-local": "*",
     "path": "*",
-    "request": "^2.87.0",
+    "request": "^2.88.2",
     "serve-favicon": "*"
   }
 }
